@@ -33,14 +33,14 @@ pipeline {
         }
         stage ("Nexus store Artifact") {
             steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'simple-web-app', classifier: '', file: 'target/simple-web-app.war', type: 'war']], credentialsId: 'NexusID', groupId: 'org.mitre', nexusUrl: '54.80.23.150:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven_Hosted', version: '3.1.16'
+                nexusArtifactUploader artifacts: [[artifactId: 'simple-web-app', classifier: '', file: 'target/simple-web-app.war', type: 'war']], credentialsId: 'NexusID', groupId: 'org.mitre', nexusUrl: '54.80.23.150:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven_Hosted', version: '3.1.18'
                 
             }
             
         }
         stage ("Deployment in Tomcat") {
             steps {
-                sh "cp target/simple-web-app-3.1.16.war /opt/apache-tomcat-8.5.51/webapps/"
+                sh "cp *.war /opt/apache-tomcat-8.5.51/webapps/"
             }
         }
     }
