@@ -1,9 +1,12 @@
 pipeline {
     agent any
+    tools {
+        maven 'maven'
+    }
     stages {
         stage ("scm") {
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/vrer2/Sample_Project.git']]])
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/Raja6865/Devops.git']]])
             }
         }
         stage ("sonar analasys") {
@@ -11,7 +14,7 @@ pipeline {
                 scannerHome = tool 'sonarscanner'
             }
             steps {
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('SonarQube') {
                     sh "${scannerHome}/bin/sonar-scanner"
                 }
             }
@@ -23,12 +26,33 @@ pipeline {
                 }
             }
         }
-        stage ("maven build") {
+        stage ("Maven Build in Pipelinemode") {
             steps {
-                withMaven(maven : 'maven') {
-                    sh "mvn install"
-                }
+                sh 'mvn package'
             }
         }
+        stage ("Nexus store Artifact") {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'simple-web-app', classifier: '', file: 'target/simple-web-app.war', type: 'war']], credentialsId: 'NexusID', groupId: 'org.mitre', nexusUrl: '54.80.23.150:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven_Hosted', version: '3.1.12'
+                
+            }
+            
+        }
+    }
+    post {
+    success {
+        emailext (
+            to: 'rajasekhar.raja50@gmail.com',
+            subject: "JOB: ${env.JOB_NAME} - SUCCESS",
+            body: "JOB SUCCESS - \"${env.JOB_NAME}\" Build No: ${env.BUILD_NUMBER}\n\nClick on the below link to view the logs:\n ${env.BUILD_URL}\n"
+        )
+    }
+    failure {
+		emailext (
+            to: 'rajasekhar.raja50@gmail.com',
+            subject: "JOB: ${env.JOB_NAME} - FAILURE",
+            body: "JOB FAILURE - \"${env.JOB_NAME}\" Build No: ${env.BUILD_NUMBER}\n\nClick on the below link to view the logs:\n ${env.BUILD_URL}\n"
+        )
+    }
     }
 }
