@@ -202,7 +202,7 @@
               <repository>
                   <id>Release</id>
                   <name>Release</name>
-                      <url>http://54.80.13.199:8081/repository/Maven_Hosted/</url>
+                      <url>http://54.146.37.137:8081/repository/Maven_Hosted/</url>
               </repository>
               <snapshotRepository>
                   <id>Snapshot</id>
