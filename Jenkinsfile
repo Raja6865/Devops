@@ -33,7 +33,7 @@ pipeline {
         }
         stage ("Nexus store Artifact") {
             steps {
-                nexusArtifactUploader artifacts: [[artifactId: 'simple-web-app', classifier: '', file: 'target/simple-web-app.war', type: 'war']], credentialsId: 'NexusID', groupId: 'org.mitre', nexusUrl: '54.146.37.137:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven_Hosted', version: '3.1.3'
+                nexusArtifactUploader artifacts: [[artifactId: 'simple-web-app', classifier: '', file: 'target/simple-web-app.war', type: 'war']], credentialsId: 'NexusID', groupId: 'org.mitre', nexusUrl: '54.146.37.137:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven_Hosted', version: '3.1.4'
                 
             }
             
